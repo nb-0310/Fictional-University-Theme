@@ -32,6 +32,16 @@ while (have_posts()) {
 
     <?php endif; ?>
 
+    <?php 
+
+    $test_array = get_pages(array(
+        "child_of" => get_the_ID()
+    ));
+
+    if ($parent_id or $test_array) :
+
+    ?>
+
     <div class="page-links">
         <h2 class="page-links__title"><a href="<?php echo get_permalink($parent_id); ?>">
             <?php echo get_the_title($parent_id); ?>
@@ -47,12 +57,15 @@ while (have_posts()) {
             wp_list_pages(
                 array(
                     "title_li" => NULL,
-                    "child_of" => $child_of
+                    "child_of" => $child_of,
+                    "sort_column" => 'menu_order'
                 )
             )
                 ?>
         </ul>
     </div>
+
+    <?php endif; ?>
 
     <div class="generic-content">
         <?php the_content() ?>
