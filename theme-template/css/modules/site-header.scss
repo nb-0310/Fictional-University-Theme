@@ -107,3 +107,16 @@
     margin-right: 0;
   }
 }
+
+/* Define mixins for media queries */
+@mixin atSmall {
+  @media (max-width: 767px) {
+    @content;
+  }
+}
+
+@mixin atMedium {
+  @media (min-width: 768px) {
+    @content;
+  }
+}
