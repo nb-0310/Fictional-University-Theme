@@ -1,12 +1,25 @@
 <?php
 
-function university_theme_support() {
+function university_menus()
+{
+    $locations = array(
+        "primary" => 'Header Menu',
+        'footer_location_1' => 'Footer Menu 1',
+        'footer_location_2' => 'Footer Menu 2'
+    );
+    register_nav_menus($locations);
+}
+
+function university_theme_support()
+{
     add_theme_support('title-tag');
+    university_menus();
 }
 
 add_action("after_setup_theme", "university_theme_support");
 
-function fictionalUniversityFiles() {
+function fictionalUniversityFiles()
+{
     wp_enqueue_script("university-main-js", get_theme_file_uri("/theme-template/build/index.js"), array("jquery"), "1.0", true);
 
     wp_enqueue_style("university-main-styles", get_theme_file_uri("/theme-template/build/style-index.css"));
