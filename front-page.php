@@ -1,7 +1,9 @@
 <?php get_header(); ?>
 
 <div class="page-banner">
-    <div class="page-banner__bg-image" style="background-image: url(<?php echo get_theme_file_uri("/theme-template/images/library-hero.jpg") ?>)"></div>
+    <div class="page-banner__bg-image"
+        style="background-image: url(<?php echo get_theme_file_uri("/theme-template/images/library-hero.jpg") ?>)">
+    </div>
     <div class="page-banner__content container t-center c-white">
         <h1 class="headline headline--large"><?php the_title(); ?></h1>
         <h2 class="headline headline--medium">We think you&rsquo;ll like it here.</h2>
@@ -16,28 +18,38 @@
         <div class="full-width-split__inner">
             <h2 class="headline headline--small-plus t-center">Upcoming Events</h2>
 
-            <div class="event-summary">
-                <a class="event-summary__date t-center" href="#">
-                    <span class="event-summary__month">Mar</span>
-                    <span class="event-summary__day">25</span>
-                </a>
-                <div class="event-summary__content">
-                    <h5 class="event-summary__title headline headline--tiny"><a href="#">Poetry in the 100</a></h5>
-                    <p>Bring poems you&rsquo;ve wrote to the 100 building this Tuesday for an open mic and snacks. <a
-                            href="#" class="nu gray">Learn more</a></p>
+            <?php
+            $home_page_events = new WP_Query(
+                array(
+                    'posts_per_page' => 2,
+                    'post_type' => 'event'
+                )
+            );
+
+            while ($home_page_events->have_posts()) {
+                $home_page_events->the_post();
+                ?>
+
+
+                <div class="event-summary">
+                    <a class="event-summary__date t-center" href="#">
+                        <span class="event-summary__month"><?php echo get_the_date('M'); ?></span>
+                        <span class="event-summary__day"><?php echo get_the_date('j'); ?></span>
+                    </a>
+                    <div class="event-summary__content">
+                        <h5 class="event-summary__title headline headline--tiny"><a
+                                href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h5>
+                        <p><?php if (has_excerpt()) {
+                            echo get_the_excerpt();
+                        } else {
+                            echo wp_trim_words(get_the_excerpt(), 18);
+                        } ?> <a href="#" class="nu gray">Learn more</a>
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <div class="event-summary">
-                <a class="event-summary__date t-center" href="#">
-                    <span class="event-summary__month">Apr</span>
-                    <span class="event-summary__day">02</span>
-                </a>
-                <div class="event-summary__content">
-                    <h5 class="event-summary__title headline headline--tiny"><a href="#">Quad Picnic Party</a></h5>
-                    <p>Live music, a taco truck and more can found in our third annual quad picnic day. <a href="#"
-                            class="nu gray">Learn more</a></p>
-                </div>
-            </div>
+
+            <?php }
+            wp_reset_postdata(); ?>
 
             <p class="t-center no-margin"><a href="#" class="btn btn--blue">View All Events</a></p>
         </div>
@@ -52,22 +64,25 @@
                     'posts_per_page' => 2
                 )
             );
-            while ( $home_page_posts->have_posts() ) {
+            while ($home_page_posts->have_posts()) {
                 $home_page_posts->the_post();
-            ?>
+                ?>
 
-            <div class="event-summary">
-                <a class="event-summary__date event-summary__date--beige t-center" href="<?php the_permalink(); ?>">
-                    <span class="event-summary__month"><?php the_date('M'); ?></span>
-                    <span class="event-summary__day"><?php the_date('D'); ?></span>
-                </a>
-                <div class="event-summary__content">
-                    <h5 class="event-summary__title headline headline--tiny"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-                    </h5>
-                    <p><?php echo wp_trim_words(get_the_excerpt(), 18); ?> <a href="<?php the_permalink(); ?>" class="nu gray">Read more</a></p>
+                <div class="event-summary">
+                    <a class="event-summary__date event-summary__date--beige t-center" href="<?php the_permalink(); ?>">
+                        <span class="event-summary__month"><?php echo get_the_date('M'); ?></span>
+                        <span class="event-summary__day"><?php echo get_the_date('j'); ?></span>
+                    </a>
+                    <div class="event-summary__content">
+                        <h5 class="event-summary__title headline headline--tiny"><a
+                                href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                        </h5>
+                        <p><?php echo wp_trim_words(get_the_excerpt(), 18); ?> <a href="<?php the_permalink(); ?>"
+                                class="nu gray">Read more</a></p>
+                    </div>
                 </div>
-            </div>
-            <?php } wp_reset_postdata(); ?>
+            <?php }
+            wp_reset_postdata(); ?>
             <!-- <div class="event-summary">
                 <a class="event-summary__date event-summary__date--beige t-center" href="#">
                     <span class="event-summary__month">Feb</span>
@@ -89,7 +104,8 @@
 <div class="hero-slider">
     <div data-glide-el="track" class="glide__track">
         <div class="glide__slides">
-            <div class="hero-slider__slide" style="background-image: url(<?php echo get_theme_file_uri("/theme-template/images/bus.jpg") ?>)">
+            <div class="hero-slider__slide"
+                style="background-image: url(<?php echo get_theme_file_uri("/theme-template/images/bus.jpg") ?>)">
                 <div class="hero-slider__interior container">
                     <div class="hero-slider__overlay">
                         <h2 class="headline headline--medium t-center">Free Transportation</h2>
@@ -98,7 +114,8 @@
                     </div>
                 </div>
             </div>
-            <div class="hero-slider__slide" style="background-image: url(<?php echo get_theme_file_uri("/theme-template/images/apples.jpg") ?>)">
+            <div class="hero-slider__slide"
+                style="background-image: url(<?php echo get_theme_file_uri("/theme-template/images/apples.jpg") ?>)">
                 <div class="hero-slider__interior container">
                     <div class="hero-slider__overlay">
                         <h2 class="headline headline--medium t-center">An Apple a Day</h2>
@@ -107,7 +124,8 @@
                     </div>
                 </div>
             </div>
-            <div class="hero-slider__slide" style="background-image: url(<?php echo get_theme_file_uri("/theme-template/images/bread.jpg") ?>)">
+            <div class="hero-slider__slide"
+                style="background-image: url(<?php echo get_theme_file_uri("/theme-template/images/bread.jpg") ?>)">
                 <div class="hero-slider__interior container">
                     <div class="hero-slider__overlay">
                         <h2 class="headline headline--medium t-center">Free Food</h2>
