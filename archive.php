@@ -5,8 +5,18 @@
         style="background-image: url(<?php echo get_theme_file_uri("/theme-template/images/library-hero.jpg") ?>)">
     </div>
     <div class="page-banner__content container t-center c-white">
-        <h1 class="headline headline--large">Welcome to our blog!</h1>
-        <h3 class="headline headline--small">Keep up with our <strong>latest</strong> news!</h3>
+        <h1 class="headline headline--large">
+        <?php 
+        // if (is_category()) {
+        //     single_cat_title();
+        // };
+        // if (is_author()) {
+        //     echo "Posts by "; the_author();
+        // };
+        the_archive_title(); 
+        ?>
+        </h1>
+        <h3 class="headline headline--small"><?php echo the_archive_description(); ?>
     </div>
 </div>
 
