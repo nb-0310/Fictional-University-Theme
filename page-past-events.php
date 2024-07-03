@@ -17,11 +17,11 @@
     $today = date('Ymd');
     $past_events = new WP_Query(
         array(
-            "posts_per_page" => -1,
+            "posts_per_page" => 1,
             "post_type" => "event",
             'meta_key' => 'event-date',
             'orderby' => 'meta_value_num',
-            'order' => 'ASC',
+            'order' => 'DESC',
             'meta_query' => array(
                 array(
                     'key' => 'event-date',
@@ -56,7 +56,10 @@
                 </div>
             </div>
         <?php }
-        echo paginate_links();
+
+        echo paginate_links(array(
+            'total' => $past_events->max_num_pages
+        ));
     } else {
         echo '<p>No past events found.</p>';
     }
