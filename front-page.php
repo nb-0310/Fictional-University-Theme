@@ -22,7 +22,18 @@
             $home_page_events = new WP_Query(
                 array(
                     'posts_per_page' => 2,
-                    'post_type' => 'event'
+                    'post_type' => 'event',
+                    'meta_key' => 'event-date',
+                    'orderby' => 'meta_value_num',
+                    'order' => 'ASC',
+                    // 'type' => 'DATE',
+                    'meta_query' => array(
+                        array(
+                            'key' => 'event-date',
+                            'compare' => '>=',
+                            'value' => date('Ymd')
+                        )
+                    )
                 )
             );
 
@@ -33,8 +44,12 @@
 
                 <div class="event-summary">
                     <a class="event-summary__date t-center" href="#">
-                        <span class="event-summary__month"><?php echo get_the_date('M'); ?></span>
-                        <span class="event-summary__day"><?php echo get_the_date('j'); ?></span>
+                        <span class="event-summary__month">
+                            <?php
+                            $date = new DateTime(get_field('event-date'));
+                            echo $date->format('M'); ?>
+                        </span>
+                        <span class="event-summary__day"><?php echo $date->format('j'); ?></span>
                     </a>
                     <div class="event-summary__content">
                         <h5 class="event-summary__title headline headline--tiny"><a
