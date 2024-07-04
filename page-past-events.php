@@ -17,7 +17,7 @@
     $today = date('Ymd');
     $past_events = new WP_Query(
         array(
-            "posts_per_page" => 1,
+            "posts_per_page" => 10,
             "post_type" => "event",
             'meta_key' => 'event-date',
             'orderby' => 'meta_value_num',
