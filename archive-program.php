@@ -1,16 +1,13 @@
 <?php get_header(); ?>
 
-<div class="page-banner">
-    <div class="page-banner__bg-image"
-        style="background-image: url(<?php echo get_theme_file_uri("/theme-template/images/library-hero.jpg") ?>)">
-    </div>
-    <div class="page-banner__content container t-center c-white">
-        <h1 class="headline headline--large">
-            All Events
-        </h1>
-        <h3 class="headline headline--small">See What is going on in our world
-    </div>
-</div>
+<?php
+page_banner(
+    array(
+        "title" => "All Programs",
+        "subtitle" => "There is something for everyone. Have a look around."
+    )
+);
+?>
 
 <div class="container container--narrow page-section">
     <ul class="link-list min-list">

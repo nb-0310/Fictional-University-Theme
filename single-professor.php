@@ -2,26 +2,20 @@
 get_header();
 
 while (have_posts()) {
-    the_post(); ?>
-    <?php
+    the_post(); 
     page_banner();
     ?>
 
     <div class="container container--narrow page-section">
         <div class="generic-content">
-
-            <div class="metabox metabox--position-up metabox--with-home-link">
-                <a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('event'); ?>"><i
-                        class="fa fa-home" aria-hidden="true"></i> Back to Events</a> <span
-                    class="metabox__main"><?php the_title(); ?>
-                </span>
+            <div class="row group">
+                <div class="one-third"><?php the_post_thumbnail('professor-portrait'); ?></div>
+                <div class="two-thirds"><?php the_content(); ?></div>
             </div>
-
-            <p><?php the_content() ?></p>
         </div>
         <?php if (get_field('related-programs')): ?>
             <hr class="section-break">
-            <h2 class="headline headline--medium">Related Program(s)</h2>
+            <h2 class="headline headline--medium">Subject(s) Taught</h2>
             <ul>
                 <?php
                 $relations = get_field('related-programs');

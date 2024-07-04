@@ -1,24 +1,13 @@
 <?php get_header(); ?>
 
-<div class="page-banner">
-    <div class="page-banner__bg-image"
-        style="background-image: url(<?php echo get_theme_file_uri("/theme-template/images/library-hero.jpg") ?>)">
-    </div>
-    <div class="page-banner__content container t-center c-white">
-        <h1 class="headline headline--large">
-        <?php 
-        // if (is_category()) {
-        //     single_cat_title();
-        // };
-        // if (is_author()) {
-        //     echo "Posts by "; the_author();
-        // };
-        the_archive_title(); 
-        ?>
-        </h1>
-        <h3 class="headline headline--small"><?php echo the_archive_description(); ?>
-    </div>
-</div>
+<?php
+page_banner(
+    array(
+        "title" => get_the_archive_title(),
+        "subtitle" => get_the_archive_description()
+    )
+)
+    ?>
 
 <div class="container container--narrow page-section">
     <?php
@@ -31,7 +20,8 @@
                     href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
 
             <div class="metabox">
-                <p>Posted By <?php the_author_posts_link(); ?> on <?php the_time('n.j.y'); ?> in <?php echo get_the_category_list(', '); ?></p>
+                <p>Posted By <?php the_author_posts_link(); ?> on <?php the_time('n.j.y'); ?> in
+                    <?php echo get_the_category_list(', '); ?></p>
             </div>
 
             <div class="generic-content">
@@ -39,7 +29,7 @@
                 <p><a class="btn btn--blue" href="<?php the_permalink(); ?>">Continue Reading &raquo;</a></p>
             </div>
         </div>
-    <?php } 
+    <?php }
     echo paginate_links();
     ?>
 </div>
