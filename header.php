@@ -21,7 +21,7 @@ $rest_of_name = implode(' ', $site_name_parts);
     <header class="site-header">
         <div class="container">
             <h1 class="school-logo-text float-left">
-                <a href="#"><strong><?php echo $first_word; ?></strong> <?php echo $rest_of_name; ?></a>
+                <a href="<?php echo site_url('/') ?>"><strong><?php echo $first_word; ?></strong> <?php echo $rest_of_name; ?></a>
             </h1>
             <span class="js-search-trigger site-header__search-trigger"><i class="fa fa-search"
                     aria-hidden="true"></i></span>
