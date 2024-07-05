@@ -84,7 +84,7 @@
     </div>
 </footer>
 
-<div class="search-overlay">
+<!-- <div class="search-overlay">
     <div class="search-overlay__top">
         <div class="container">
             <i class="fa fa-search search-overlay_icon" aria-hidden="true"></i>
@@ -94,9 +94,9 @@
     </div>
 
     <div class="container">
-        <div class="search-overlay__results">123</div>
+        <div class="search-overlay__results"></div>
     </div>
-</div>
+</div> -->
 
 <?php wp_footer(); ?>
 </body>

@@ -1,5 +1,8 @@
 class Search {
 	constructor() {
+		this.addSearchHTML();
+        console.log('after fn call')
+
 		this.openButton = document.querySelectorAll(".js-search-trigger");
 		this.closeButton = document.querySelector(".search-overlay__close");
 		this.searchOverlay = document.querySelector(".search-overlay");
@@ -32,10 +35,13 @@ class Search {
 	openOverlay(event) {
 		event.stopPropagation();
 		event.preventDefault();
+        this.searchTerm.value = ''
+        this.resultsDiv.innerHTML = '<h2 class="search-overlay__section-title">Search Results</h2>'
 		console.log("Open button clicked");
 		if (this.searchOverlay) {
 			this.searchOverlay.classList.add("search-overlay--active");
 			document.querySelector("body").classList.add("body-no-scroll");
+            setTimeout(() => this.searchTerm.focus(), 301)
 			console.log("Overlay should be active now");
 		} else {
 			console.error("Search overlay not found");
@@ -79,11 +85,12 @@ class Search {
 	}
 
 	async getResults() {
+        this.showLoader = true
 		const searchTerm = this.searchTerm.value;
 
 		if (searchTerm !== "") {
 			try {
-				const [posts, events, programs, professors] = await Promise.all([
+				const [posts, events, programs, professors, pages] = await Promise.all([
 					fetch(
 						`http://localhost:10013/wp-json/wp/v2/posts?search=${searchTerm}`
 					).then((response) => response.json()),
@@ -96,38 +103,58 @@ class Search {
 					fetch(
 						`http://localhost:10013/wp-json/wp/v2/professor?search=${searchTerm}`
 					).then((response) => response.json()),
+                    fetch(
+						`http://localhost:10013/wp-json/wp/v2/pages?search=${searchTerm}`
+					).then((response) => response.json()),
 				]);
-
-				console.log(posts);
-				console.log(events);
-				console.log(programs);
-				console.log(professors);
 
 				const combinedResults = [
 					...(posts || []),
 					...(events || []),
 					...(programs || []),
 					...(professors || []),
+                    ...(pages || [])
 				];
 
 				this.resultsDiv.innerHTML = `
                 <h2 class="search-overlay__section-title">Search Results</h2>
                 <ul class="link-list min-list">
-                    ${combinedResults
-											.map(
-												(item) => `
-                                <li><a href="${item.link}">${item.title.rendered}</a> (${item.type})</li>
-                            `
-											)
-											.join("")}
+                    ${
+                        combinedResults
+                            .map((item) => `<li><a href="${item.link}">${item.title.rendered}</a> (${item.type})</li>`)
+                            .join("")
+                    }
                 </ul>
             `;
 			} catch (error) {
 				console.error("Error:", error);
 				this.resultsDiv.innerHTML =
 					"<p>Sorry, something went wrong. Please try again.</p>";
-			}
+			} finally {
+                this.showLoader = false
+            }
 		}
+	}
+
+	addSearchHTML() {
+        console.log('fn called')
+		const searchHTML = document.createElement("div");
+
+		searchHTML.innerHTML = `
+                <div class="search-overlay__top">
+                    <div class="container">
+                        <i class="fa fa-search search-overlay_icon" aria-hidden="true"></i>
+                        <input type="text" class="search-term" placeholder="What are you looking for?" id="search-term">
+                        <i class="fa fa-window-close search-overlay__close" aria-hidden="true"></i>
+                    </div>
+                </div>
+    
+                <div class="container">
+                    <div class="search-overlay__results"></div>
+                </div>
+        `;
+		document.body.appendChild(searchHTML);
+		searchHTML.classList.add("search-overlay");
 	}
 }
 
