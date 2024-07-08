@@ -178,23 +178,82 @@ class Search {
   async getResults() {
     this.showLoader = true;
     const searchTerm = this.searchTerm.value;
-    if (searchTerm !== "") {
-      try {
-        const [posts, events, programs, professors, pages] = await Promise.all([fetch(`http://localhost:10013/wp-json/wp/v2/posts?search=${searchTerm}`).then(response => response.json()), fetch(`http://localhost:10013/wp-json/wp/v2/event?search=${searchTerm}`).then(response => response.json()), fetch(`http://localhost:10013/wp-json/wp/v2/program?search=${searchTerm}`).then(response => response.json()), fetch(`http://localhost:10013/wp-json/wp/v2/professor?search=${searchTerm}`).then(response => response.json()), fetch(`http://localhost:10013/wp-json/wp/v2/pages?search=${searchTerm}`).then(response => response.json())]);
-        const combinedResults = [...(posts || []), ...(events || []), ...(programs || []), ...(professors || []), ...(pages || [])];
-        this.resultsDiv.innerHTML = `
-                <h2 class="search-overlay__section-title">Search Results</h2>
-                <ul class="link-list min-list">
-                    ${combinedResults.map(item => `<li><a href="${item.link}">${item.title.rendered}</a> ${item.type === 'post' ? `(By ${item.authorName})` : ''}</li>`).join("")}
-                </ul>
-            `;
-      } catch (error) {
-        console.error("Error:", error);
-        this.resultsDiv.innerHTML = "<p>Sorry, something went wrong. Please try again.</p>";
-      } finally {
-        this.showLoader = false;
-      }
-    }
+    try {
+      const res = await fetch(`http://localhost:10013/wp-json/university/search?term=${searchTerm}`);
+      const data = await res.json();
+      console.log(data);
+      this.resultsDiv.innerHTML = `
+				<div class="row">
+					<div class="one-third">
+						<h2 class="search-overlay__section-title">General Information</h2>
+						 <ul class="link-list min-list">
+						${data['general_info'].map(item => `<li><a href="${item.permalink}">${item.title}</a> ${item.type === 'post' ? `(By ${item.authorName})` : ''}</li>`).join("")}
+                		</ul>
+					</div>
+					<div class="one-third">
+						<h2 class="search-overlay__section-title">Programs</h2>
+						<ul class="link-list min-list">
+						${data['programs'].length ? data['programs'].map(item => `<li><a href="${item.permalink}">${item.title}</a></li>`).join("") : `<p>No programs match that search. <a href="${data.root_url}/programs">View all programs</a></p>`}
+                		</ul>
+
+						<h2 class="search-overlay__section-title">Professors</h2>
+					</div>
+					<div class="one-third">
+						<h2 class="search-overlay__section-title">Events</h2>
+					</div>
+				</div>
+			`;
+      this.showLoader = false;
+    } catch (error) {}
+
+    // delete this code later
+
+    // if (searchTerm !== "") {
+    // 	try {
+    // 		const [posts, events, programs, professors, pages] = await Promise.all([
+    // 			fetch(
+    // 				`http://localhost:10013/wp-json/wp/v2/posts?search=${searchTerm}`
+    // 			).then((response) => response.json()),
+    // 			fetch(
+    // 				`http://localhost:10013/wp-json/wp/v2/event?search=${searchTerm}`
+    // 			).then((response) => response.json()),
+    // 			fetch(
+    // 				`http://localhost:10013/wp-json/wp/v2/program?search=${searchTerm}`
+    // 			).then((response) => response.json()),
+    // 			fetch(
+    // 				`http://localhost:10013/wp-json/wp/v2/professor?search=${searchTerm}`
+    // 			).then((response) => response.json()),
+    //             fetch(
+    // 				`http://localhost:10013/wp-json/wp/v2/pages?search=${searchTerm}`
+    // 			).then((response) => response.json()),
+    // 		]);
+
+    // 		const combinedResults = [
+    // 			...(posts || []),
+    // 			...(events || []),
+    // 			...(programs || []),
+    // 			...(professors || []),
+    //             ...(pages || [])
+    // 		];
+
+    // 		this.resultsDiv.innerHTML = `
+    //         <h2 class="search-overlay__section-title">Search Results</h2>
+    //         <ul class="link-list min-list">
+    //             ${
+    //                 combinedResults
+    //                     .map((item) => `<li><a href="${item.link}">${item.title.rendered}</a> ${item.type === 'post' ? `(By ${item.authorName})` : ''}</li>`)
+    //                     .join("")
+    //             }
+    //         </ul>
+    //     `;
+    // 	} catch (error) {
+    // 		console.error("Error:", error);
+    // 		this.resultsDiv.innerHTML =
+    // 			"<p>Sorry, something went wrong. Please try again.</p>";
+    // 	} finally {
+    //         this.showLoader = false
+    //     }
+    // }
   }
   addSearchHTML() {
     console.log('fn called');
