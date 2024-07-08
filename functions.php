@@ -1,4 +1,18 @@
 <?php
+function university_custom_rest()
+{
+    register_rest_field(
+        'post', 
+        'authorName', 
+        array(
+            'get_callback' => function () {
+                return get_the_author();
+            }
+        )
+    );
+}
+
+add_action("rest_api_init", "university_custom_rest");
 function page_banner($args = NULL)
 {
     if (!isset($args['title'])) {
@@ -10,7 +24,7 @@ function page_banner($args = NULL)
     }
 
     if (!isset($args['photo'])) {
-        if (get_field('page_banner_background') AND !is_archive() AND !is_home()) {
+        if (get_field('page_banner_background') and !is_archive() and !is_home()) {
             $args['photo'] = get_field('page_banner_background')['sizes']['page-banner'];
         } else {
             $args['photo'] = get_theme_file_uri('/theme-template/images/ocean.jpg');

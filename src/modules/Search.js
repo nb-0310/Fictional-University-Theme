@@ -121,7 +121,7 @@ class Search {
                 <ul class="link-list min-list">
                     ${
                         combinedResults
-                            .map((item) => `<li><a href="${item.link}">${item.title.rendered}</a> (${item.type})</li>`)
+                            .map((item) => `<li><a href="${item.link}">${item.title.rendered}</a> ${item.type === 'post' ? `(By ${item.authorName})` : ''}</li>`)
                             .join("")
                     }
                 </ul>
