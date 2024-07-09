@@ -1,7 +1,7 @@
 class Search {
 	constructor() {
 		this.addSearchHTML();
-        console.log('after fn call')
+		console.log("after fn call");
 
 		this.openButton = document.querySelectorAll(".js-search-trigger");
 		this.closeButton = document.querySelector(".search-overlay__close");
@@ -35,13 +35,14 @@ class Search {
 	openOverlay(event) {
 		event.stopPropagation();
 		event.preventDefault();
-        this.searchTerm.value = ''
-        this.resultsDiv.innerHTML = '<h2 class="search-overlay__section-title">Search Results</h2>'
+		this.searchTerm.value = "";
+		this.resultsDiv.innerHTML =
+			'<h2 class="search-overlay__section-title">Search Results</h2>';
 		console.log("Open button clicked");
 		if (this.searchOverlay) {
 			this.searchOverlay.classList.add("search-overlay--active");
 			document.querySelector("body").classList.add("body-no-scroll");
-            setTimeout(() => this.searchTerm.focus(), 301)
+			setTimeout(() => this.searchTerm.focus(), 301);
 			console.log("Overlay should be active now");
 		} else {
 			console.error("Search overlay not found");
@@ -85,48 +86,96 @@ class Search {
 	}
 
 	async getResults() {
-        this.showLoader = true
+		this.showLoader = true;
 		const searchTerm = this.searchTerm.value;
 
 		try {
-			const res = await fetch(`http://localhost:10013/wp-json/university/search?term=${searchTerm}`)
-			const data = await res.json()
+			const res = await fetch(
+				`http://localhost:10013/wp-json/university/search?term=${searchTerm}`
+			);
+			const data = await res.json();
 
-			console.log(data)
+			console.log(data);
 
 			this.resultsDiv.innerHTML = `
 				<div class="row">
 					<div class="one-third">
 						<h2 class="search-overlay__section-title">General Information</h2>
 						 <ul class="link-list min-list">
-						${
-							data['general_info']
-								.map((item) => `<li><a href="${item.permalink}">${item.title}</a> ${item.type === 'post' ? `(By ${item.authorName})` : ''}</li>`)
-								.join("")
-						}
+						${data["general_info"]
+							.map(
+								(item) =>
+									`<li><a href="${item.permalink}">${item.title}</a> ${
+										item.type === "post" ? `(By ${item.authorName})` : ""
+									}</li>`
+							)
+							.join("")}
                 		</ul>
 					</div>
 					<div class="one-third">
 						<h2 class="search-overlay__section-title">Programs</h2>
 						<ul class="link-list min-list">
 						${
-							data['programs'].length ? data['programs']
-							.map(item => `<li><a href="${item.permalink}">${item.title}</a></li>`)
-							.join("") : `<p>No programs match that search. <a href="${data.root_url}/programs">View all programs</a></p>`
+							data["programs"].length
+								? data["programs"]
+										.map(
+											(item) =>
+												`<li><a href="${item.permalink}">${item.title}</a></li>`
+										)
+										.join("")
+								: `<p>No programs match that search. <a href="${data.root_url}/programs">View all programs</a></p>`
 						}
                 		</ul>
 
 						<h2 class="search-overlay__section-title">Professors</h2>
+						<ul class="link-list min-list">
+						${
+							data["professors"].length
+								? data["professors"]
+										.map(
+											(item) => `
+									 <li class="professor-card__list-item">
+                        <a class="professor-card" href="${item.permalink}">
+                            <img class="professor-card__image" src="${item.image}" alt="">
+                            <span class="professor-card__name">${item.title}</span>
+                            <span></span>
+                        </a>
+                    </li>
+								`
+										)
+										.join("")
+								: `<p>No professors match that search. <a href="${data.root_url}/professors">View all professors</a></p>`
+						}
+						</ul>
 					</div>
 					<div class="one-third">
 						<h2 class="search-overlay__section-title">Events</h2>
+						${data["events"]  
+							.map(
+								(item) => `
+						<div class="event-summary">
+							<a class="event-summary__date t-center" href="${item.permalink}">
+								<span class="event-summary__month">
+									${item.month}
+								</span>
+								<span class="event-summary__day">${item.day}</span>
+							</a>
+							<div class="event-summary__content">
+								<h5 class="event-summary__title headline headline--tiny"><a
+										href="${item.permalink}">${item.title}</a></h5>
+								<p>${item.excerpt} <a href="${item.permalink}" class="nu gray">Learn more</a>
+								</p>
+							</div>
+						</div>
+						`
+							)
+							.join("")}
+						</ul>
 					</div>
 				</div>
-			`
-			this.showLoader = false
-		} catch (error) {
-			
-		}
+			`;
+			this.showLoader = false;
+		} catch (error) {}
 
 		// delete this code later
 
@@ -145,7 +194,7 @@ class Search {
 		// 			fetch(
 		// 				`http://localhost:10013/wp-json/wp/v2/professor?search=${searchTerm}`
 		// 			).then((response) => response.json()),
-        //             fetch(
+		//             fetch(
 		// 				`http://localhost:10013/wp-json/wp/v2/pages?search=${searchTerm}`
 		// 			).then((response) => response.json()),
 		// 		]);
@@ -155,31 +204,31 @@ class Search {
 		// 			...(events || []),
 		// 			...(programs || []),
 		// 			...(professors || []),
-        //             ...(pages || [])
+		//             ...(pages || [])
 		// 		];
 
 		// 		this.resultsDiv.innerHTML = `
-        //         <h2 class="search-overlay__section-title">Search Results</h2>
-        //         <ul class="link-list min-list">
-        //             ${
-        //                 combinedResults
-        //                     .map((item) => `<li><a href="${item.link}">${item.title.rendered}</a> ${item.type === 'post' ? `(By ${item.authorName})` : ''}</li>`)
-        //                     .join("")
-        //             }
-        //         </ul>
-        //     `;
+		//         <h2 class="search-overlay__section-title">Search Results</h2>
+		//         <ul class="link-list min-list">
+		//             ${
+		//                 combinedResults
+		//                     .map((item) => `<li><a href="${item.link}">${item.title.rendered}</a> ${item.type === 'post' ? `(By ${item.authorName})` : ''}</li>`)
+		//                     .join("")
+		//             }
+		//         </ul>
+		//     `;
 		// 	} catch (error) {
 		// 		console.error("Error:", error);
 		// 		this.resultsDiv.innerHTML =
 		// 			"<p>Sorry, something went wrong. Please try again.</p>";
 		// 	} finally {
-        //         this.showLoader = false
-        //     }
+		//         this.showLoader = false
+		//     }
 		// }
 	}
 
 	addSearchHTML() {
-        console.log('fn called')
+		console.log("fn called");
 		const searchHTML = document.createElement("div");
 
 		searchHTML.innerHTML = `
