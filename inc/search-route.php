@@ -69,7 +69,7 @@ function university_search_results($data)
             array_push($results['events'], array(
                 'title' => get_the_title(),
                 'permalink' => get_the_permalink(),
-                'month' => get_date()['month'],
+                'month'  => get_date()['month'],
                 'day' => get_date()['day'],
                 'excerpt' => $description
             )
