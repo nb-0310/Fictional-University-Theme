@@ -14,9 +14,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_HeroSlider__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/HeroSlider */ "./src/modules/HeroSlider.js");
 /* harmony import */ var _modules_Search__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/Search */ "./src/modules/Search.js");
 /* harmony import */ var _modules_MyNotes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/MyNotes */ "./src/modules/MyNotes.js");
+/* harmony import */ var _modules_Like__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/Like */ "./src/modules/Like.js");
 
 
 // Our modules / classes
+
 
 
 
@@ -27,6 +29,7 @@ const mobileMenu = new _modules_MobileMenu__WEBPACK_IMPORTED_MODULE_1__["default
 const heroSlider = new _modules_HeroSlider__WEBPACK_IMPORTED_MODULE_2__["default"]();
 const search = new _modules_Search__WEBPACK_IMPORTED_MODULE_3__["default"]();
 const myNotes = new _modules_MyNotes__WEBPACK_IMPORTED_MODULE_4__["default"]();
+const like = new _modules_Like__WEBPACK_IMPORTED_MODULE_5__["default"]();
 
 /***/ }),
 
@@ -68,6 +71,79 @@ class HeroSlider {
   }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (HeroSlider);
+
+/***/ }),
+
+/***/ "./src/modules/Like.js":
+/*!*****************************!*\
+  !*** ./src/modules/Like.js ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Like)
+/* harmony export */ });
+class Like {
+  constructor() {
+    this.events();
+  }
+  events() {
+    document.querySelector(".like-box").addEventListener("click", this.ourClickDispatcher.bind(this));
+  }
+  ourClickDispatcher(e) {
+    const currentLikeBox = e.target.closest(".like-box");
+    const exists = currentLikeBox.getAttribute("data-exists");
+    console.log(exists);
+    if (exists === "yes") {
+      this.deleteLike();
+    } else {
+      this.createLike();
+    }
+  }
+  async createLike() {
+    try {
+      const res = await fetch(`http://localhost:10013/wp-json/university/manageLike`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer YOUR_ACCESS_TOKEN",
+          "X-WP-Nonce": universityData.nonce
+        },
+        body: {
+          professorId: '123'
+        }
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      const data = await res.json();
+      console.log("Update successful", data);
+    } catch (err) {
+      console.log('there was an error');
+      console.error(err);
+    }
+  }
+  async deleteLike() {
+    try {
+      const res = await fetch(`http://localhost:10013/wp-json/university/manageLike`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer YOUR_ACCESS_TOKEN",
+          "X-WP-Nonce": universityData.nonce
+        }
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      const data = await res.json();
+      console.log("Update successful", data);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+}
 
 /***/ }),
 
@@ -116,19 +192,21 @@ class MyNotes {
   }
   events() {
     const notesList = document.querySelector("#my-notes");
-    notesList.addEventListener("click", event => {
-      const target = event.target;
-      if (target.classList.contains("edit-note")) {
-        this.editNote(event);
-      } else if (target.classList.contains("delete-note")) {
-        this.deleteNote(event);
-      } else if (target.classList.contains("update-note")) {
-        this.updateNote(event);
+    if (notesList) {
+      notesList.addEventListener("click", event => {
+        const target = event.target;
+        if (target.classList.contains("edit-note")) {
+          this.editNote(event);
+        } else if (target.classList.contains("delete-note")) {
+          this.deleteNote(event);
+        } else if (target.classList.contains("update-note")) {
+          this.updateNote(event);
+        }
+      });
+      const createButton = document.querySelector(".submit-note");
+      if (createButton) {
+        createButton.addEventListener("click", this.createNote.bind(this));
       }
-    });
-    const createButton = document.querySelector(".submit-note");
-    if (createButton) {
-      createButton.addEventListener("click", this.createNote.bind(this));
     }
   }
   editNote(e) {

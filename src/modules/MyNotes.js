@@ -6,21 +6,23 @@ export default class MyNotes {
 	events() {
 		const notesList = document.querySelector("#my-notes");
 
-		notesList.addEventListener("click", (event) => {
-			const target = event.target;
+		if (notesList) {
+			notesList.addEventListener("click", (event) => {
+				const target = event.target;
 
-			if (target.classList.contains("edit-note")) {
-				this.editNote(event);
-			} else if (target.classList.contains("delete-note")) {
-				this.deleteNote(event);
-			} else if (target.classList.contains("update-note")) {
-				this.updateNote(event);
+				if (target.classList.contains("edit-note")) {
+					this.editNote(event);
+				} else if (target.classList.contains("delete-note")) {
+					this.deleteNote(event);
+				} else if (target.classList.contains("update-note")) {
+					this.updateNote(event);
+				}
+			});
+
+			const createButton = document.querySelector(".submit-note");
+			if (createButton) {
+				createButton.addEventListener("click", this.createNote.bind(this));
 			}
-		});
-
-		const createButton = document.querySelector(".submit-note");
-		if (createButton) {
-			createButton.addEventListener("click", this.createNote.bind(this));
 		}
 	}
 
@@ -93,7 +95,7 @@ export default class MyNotes {
 			const data = await res.json();
 			console.log("Delete successful", data);
 
-            liElement.classList.remove("fade-in");
+			liElement.classList.remove("fade-in");
 			liElement.classList.add("fade-out");
 
 			liElement.addEventListener("transitionend", () => {
