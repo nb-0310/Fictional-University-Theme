@@ -111,7 +111,7 @@ class Like {
           "X-WP-Nonce": universityData.nonce
         },
         body: {
-          professorId: '123'
+          professorId: "123"
         }
       });
       if (!res.ok) {
@@ -120,7 +120,7 @@ class Like {
       const data = await res.json();
       console.log("Update successful", data);
     } catch (err) {
-      console.log('there was an error');
+      console.log("there was an error");
       console.error(err);
     }
   }

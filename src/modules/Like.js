@@ -33,9 +33,9 @@ export default class Like {
 						Authorization: "Bearer YOUR_ACCESS_TOKEN",
 						"X-WP-Nonce": universityData.nonce,
 					},
-                    body: {
-                        professorId: '123'
-                    }
+					body: {
+						professorId: "123",
+					},
 				}
 			);
 
@@ -46,7 +46,7 @@ export default class Like {
 			const data = await res.json();
 			console.log("Update successful", data);
 		} catch (err) {
-            console.log('there was an error')
+			console.log("there was an error");
 			console.error(err);
 		}
 	}

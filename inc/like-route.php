@@ -29,7 +29,8 @@ function universityLikeRoutes()
     );
 }
 
-function getLike () {
+function getLike()
+{
     return 'HEYYY';
 }
 
